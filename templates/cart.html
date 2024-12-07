@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="title is-3 has-text-centered">Your Cart</h1>
+
+{% if cart_items %}
+<table class="table is-fullwidth is-hoverable">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in cart_items %}
+    <tr>
+      <td>
+        {% if item.image_url %}
+        <img
+          src="{{ item.image_url }}"
+          alt="{{ item.name }}"
+          style="max-width: 100px; max-height: 100px"
+        />
+        {% else %}
+        <span>No Image</span>
+        {% endif %}
+      </td>
+      <td>{{ item.name }}</td>
+      <td>${{ item.price }}</td>
+      <td>
+        <form method="POST" style="display: inline">
+          <input type="hidden" name="item_id" value="{{ item.id }}" />
+          <input type="hidden" name="action" value="remove" />
+          <button type="submit" class="button is-small is-danger">
+            Remove
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="has-text-centered">Your cart is empty.</p>
+{% endif %} {% endblock %}

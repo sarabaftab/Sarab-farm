@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% block content %}
+<h1 class="title is-3 has-text-centered">Admin Panel</h1>
+
+<div class="box">
+  <h2 class="title is-4">Add or Edit Item</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="field">
+      {{ form.name.label(class_='label') }}
+      <div class="control">{{ form.name(class_='input') }}</div>
+    </div>
+    <div class="field">
+      {{ form.description.label(class_='label') }}
+      <div class="control">{{ form.description(class_='input') }}</div>
+    </div>
+    <div class="field">
+      {{ form.price.label(class_='label') }}
+      <div class="control">{{ form.price(class_='input') }}</div>
+    </div>
+    <div class="field">
+      {{ form.available.label(class_='checkbox') }} {{ form.available() }}
+    </div>
+    <div class="field">
+      {{ form.image_url.label(class_='label') }}
+      <div class="control">{{ form.image_url(class_='input') }}</div>
+    </div>
+    <div class="field">
+      <button class="button is-dark" type="submit">
+        {{ form.submit.label.text }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<hr />
+
+<h2 class="title is-4">Manage Items</h2>
+<table class="table is-fullwidth is-hoverable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Available</th>
+      <th>Image</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+      <td>${{ item.price }}</td>
+      <td>{{ 'Yes' if item.available else 'No' }}</td>
+      <td>
+        {% if item.image_url %}
+        <img
+          src="{{ item.image_url }}"
+          alt="{{ item.name }}"
+          style="max-width: 100px; max-height: 100px"
+        />
+        {% else %}
+        <span>No Image</span>
+        {% endif %}
+      </td>
+      <td>
+        <a
+          href="{{ url_for('admin') }}?id={{ item.id }}"
+          class="button is-small is-info"
+          >Edit</a
+        >
+        <form
+          method="POST"
+          action="{{ url_for('delete_item', item_id=item.id) }}"
+          style="display: inline"
+        >
+          <button type="submit" class="button is-small is-danger">
+            Delete
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
